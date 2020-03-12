@@ -1,0 +1,4 @@
+{
+    "extends": "tslint:recommended",
+    "rulesDirectory": "tslint-microsoft-contrib"
+}
