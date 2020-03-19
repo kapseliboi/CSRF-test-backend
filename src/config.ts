@@ -14,8 +14,14 @@ function optionalEnv(name: string) {
     return process.env[name];
 }
 
-export const config = {
-    NODE_ENV: mandatoryEnv('NODE_ENV'),
+function stringToBool(value: string): boolean {
+    return value === 'true';
+}
+
+export default {
+    NODE_ENV: optionalEnv('NODE_ENV'),
+    SECRET_KEY: mandatoryEnv('SECRET_KEY'),
+    HTTPS_ONLY: stringToBool(optionalEnv('HTTPS_ONLY')),
     PORT: optionalEnv('PORT') || 8080,
     DATABASE_URL: mandatoryEnv('DATABASE_URL'),
 };
