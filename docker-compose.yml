@@ -1,0 +1,14 @@
+version: "3.7"
+services:
+  db:
+    image: postgres:12
+    restart: always
+    container_name: csrf_backend
+    ports:
+      - 54321:5432
+    volumes:
+      - "csrf_backend:/var/lib/postgresql/data"
+    environment:
+      - TZ=Europe/Helsinki
+volumes:
+  csrf_backend:
