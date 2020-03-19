@@ -8,7 +8,7 @@
     "dev": "concurrently -k -p '[{name}]' -n TS,Node -c green.bold,magenta.bold 'npm run watch-build' 'npm run watch-server'",
     "watch-build": "tsc -w",
     "watch-server": "nodemon -L --watch dist/src --watch src --delay 2 dist/src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx tslint --project ."
   },
   "repository": {
     "type": "git",

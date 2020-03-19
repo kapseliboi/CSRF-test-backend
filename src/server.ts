@@ -37,7 +37,7 @@ export async function initServer() {
             plugin: hapiJWT,
         }
     ];
-    
+
     if (config.HTTPS_ONLY) {
         console.log('HTTPS only enabled');
         plugins.push({
@@ -50,7 +50,7 @@ export async function initServer() {
     server.auth.strategy('jwt', 'jwt',
     {
         key: config.SECRET_KEY,
-        validate: validate,
+        validate,
         verifyOptions: {
             algorithms: [ 'HS256' ],
         },
