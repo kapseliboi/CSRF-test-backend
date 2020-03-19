@@ -1,4 +1,6 @@
-import { config } from './config/config';
+import config from './config';
+import {createConnection} from 'typeorm';
+import { initServer } from './server';
 
 console.log(`Running environment ${config.NODE_ENV}`);
 
@@ -12,9 +14,12 @@ process.on('unhandledRejection', (reason) => {
 
 async function start() {
     try {
-        
+        await createConnection();
+        await initServer();
     }
-    catch {
-        
+    catch (e) {
+        console.log(e);
     }
 }
+
+start();
