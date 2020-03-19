@@ -21,9 +21,15 @@
   },
   "homepage": "https://github.com/kapseliboi/CSRF-test-backend#readme",
   "dependencies": {
-    "@hapi/hapi": "^19.1.1"
+    "@hapi/hapi": "^19.1.1",
+    "pg": "^7.18.2",
+    "ramda": "^0.27.0",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.2.24"
   },
   "devDependencies": {
+    "@types/node": "^13.9.2",
+    "@types/ramda": "^0.26.44",
     "concurrently": "^5.1.0",
     "nodemon": "^2.0.2",
     "tslint": "^6.1.0",
