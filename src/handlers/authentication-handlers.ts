@@ -18,7 +18,7 @@ the service.
 */
 export async function loginHandler(req: LoginRequest, h: Hapi.ResponseToolkit) {
     const { usernameOrEmail, password } = req.payload;
-    var user: User;
+    let user: User;
     try {
         user = await userRepository.findOne(R.contains('@', usernameOrEmail) ?
             { email: usernameOrEmail }
@@ -28,7 +28,7 @@ export async function loginHandler(req: LoginRequest, h: Hapi.ResponseToolkit) {
         console.log(`Error occurred while trying to get user from database: ${err}`);
         return Boom.internal(ResponseStrings.internalSomethingWentWrong);
     }
-    var fakePasswordHash: string;
+    let fakePasswordHash: string;
     if (user) {
         try {
             if (await verifyPassword(user.passwordHash, password)) {
@@ -92,8 +92,8 @@ export async function registrationHandler(req: RegistrationRequest, h: Hapi.Resp
 
     // Execute whole registration process if a user can't be created due to email.
     // This is to reduce the chance of a potential attacker from gaining any extra information from timings.
-    var shouldCreateNewUser = true;
-    var newUser = new User();
+    let shouldCreateNewUser = true;
+    let newUser = new User();
     newUser.username = username;
     newUser.email = email;
 
@@ -101,9 +101,10 @@ export async function registrationHandler(req: RegistrationRequest, h: Hapi.Resp
     // This is information we should not disclose directly to a web client.
     const emailUser = await userRepository.findOne({ email });
 
-    var emailSendFunction = (user: User) => {
+    let emailSendFunction = (user: User) => {
         return new Promise((resolve) => {
-            setTimeout(resolve, Math.random() * (40) + 80); //set timeout between 80-120ms (simulate mailgun API)
+            // set timeout between 80-120ms (simulate mailgun API)
+            setTimeout(resolve, Math.random() * (40) + 80);
         });
     };
     if (!R.isNil(emailUser)) {
@@ -154,7 +155,7 @@ export async function registrationHandler(req: RegistrationRequest, h: Hapi.Resp
         console.log(`An error occurred while sending verification email: ${err}`);
         return Boom.internal(ResponseStrings.unableToSendVerificationEmail);
     }
-    
+
     return h.response().code(201);
 }
 

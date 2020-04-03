@@ -4,7 +4,7 @@ import config from '../config';
 import { User } from '../entity/User';
 import { createEmailValidationToken } from '../util/authentication';
 
-var mailService: Mailgun | Partial<Mailgun>;
+let mailService: Mailgun | Partial<Mailgun>;
 if (!R.isNil(config.MAILGUN_API_KEY)) {
     import('mailgun-js').then((mailgun) => {
         mailService = mailgun({
