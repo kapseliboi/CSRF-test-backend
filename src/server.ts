@@ -2,6 +2,7 @@ import * as Hapi from '@hapi/hapi';
 import * as HapiSwagger from 'hapi-swagger';
 import * as Inert from '@hapi/inert';
 import * as Vision from '@hapi/vision';
+import * as hapiRequireHttps from 'hapi-require-https';
 import * as hapiJWT from 'hapi-auth-jwt2';
 
 import config from './config';
@@ -37,12 +38,12 @@ export async function initServer() {
         }
     ];
 
-    // if (config.HTTPS_ONLY) {
-    //     console.log('HTTPS only enabled');
-    //     plugins.push({
-    //         plugin: hapiRequireHttps
-    //     });
-    // }
+    if (config.HTTPS_ONLY) {
+        console.log('HTTPS only enabled');
+        plugins.push({
+            plugin: hapiRequireHttps
+        });
+    }
 
     await server.register(plugins);
 
