@@ -10,7 +10,7 @@ import routes from './routes';
 
 export async function initServer() {
     const server = await new Hapi.Server({
-        host: 'localhost',
+        host: config.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost',
         port: config.PORT,
     });
 
