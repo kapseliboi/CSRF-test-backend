@@ -49,7 +49,7 @@ export async function initServer() {
 
     server.auth.strategy('jwt', 'jwt',
     {
-        key: config.SECRET_KEY,
+        key: config.JWT_SECRET_KEY,
         validate,
         verifyOptions: {
             algorithms: [ 'HS256' ],
