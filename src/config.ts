@@ -18,9 +18,13 @@ function stringToBool(value: string): boolean {
     return value === 'true';
 }
 
+function decodeBase64(value: string) {
+    return Buffer.from(value, 'base64');
+}
+
 export default {
     NODE_ENV: optionalEnv('NODE_ENV'),
-    JWT_SECRET_KEY: mandatoryEnv('JWT_SECRET_KEY'),
+    JWT_SECRET_KEY: decodeBase64(mandatoryEnv('JWT_SECRET_KEY')),
     EMAIL_TOKEN_SECRET_KEY: mandatoryEnv('EMAIL_TOKEN_SECRET_KEY'),
     FRONTEND_URL: mandatoryEnv('FRONTEND_URL'),
     HTTPS_ONLY: stringToBool(optionalEnv('HTTPS_ONLY')),

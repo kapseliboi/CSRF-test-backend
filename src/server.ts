@@ -54,7 +54,7 @@ export async function initServer() {
         verifyOptions: {
             algorithms: [ 'HS256' ],
         },
-    } as hapiJWT.Options);
+    } as any);
 
     server.auth.default('jwt');
 
