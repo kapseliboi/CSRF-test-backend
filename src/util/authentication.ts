@@ -69,11 +69,12 @@ export function createJWT(user: User) {
     return jwt.sign(data, config.JWT_SECRET_KEY, { expiresIn: '12h' });
 }
 
-export function createFakeJWT(usernameOrEmail: string) {
+export function createFakeJWT(usernameOrEmail: string, passwordVerifyRes: boolean) {
     const data = {
         id: (Math.random() * 1000).toFixed(0).toString(),
         username: usernameOrEmail,
         email: usernameOrEmail,
+        res: passwordVerifyRes,
     }
 
     return jwt.sign(data, config.JWT_SECRET_KEY, { expiresIn: '12h' });
