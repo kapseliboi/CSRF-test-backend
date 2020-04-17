@@ -1,6 +1,5 @@
 import config from './config';
 import {createConnection} from 'typeorm';
-import { AddDatabaseTriggers } from './util/database';
 
 console.log(`Running environment ${config.NODE_ENV}`);
 
@@ -14,8 +13,7 @@ process.on('unhandledRejection', (reason) => {
 
 async function start() {
     try {
-        const connection = await createConnection();
-        await AddDatabaseTriggers(connection);
+        await createConnection();
         (await import('./server')).initServer();
     }
     catch (e) {
