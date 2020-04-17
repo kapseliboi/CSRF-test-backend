@@ -8,7 +8,7 @@
     "dev": "concurrently -k -p '[{name}]' -n TS,Node -c green.bold,magenta.bold 'npm run watch-build' 'npm run watch-server'",
     "build": "tsc",
     "watch-build": "tsc -w",
-    "watch-server": "nodemon -L --watch dist/src --watch src --delay 2 dist/src/index.js",
+    "watch-server": "nodemon -L --watch dist/src --watch src --delay 2 -r source-map-support/register dist/src/index.js",
     "test": "npx tslint --project ."
   },
   "repository": {
@@ -50,6 +50,7 @@
     "@types/ramda": "^0.26.44",
     "concurrently": "^5.1.0",
     "nodemon": "^2.0.2",
+    "source-map-support": "^0.5.16",
     "tslint": "^6.1.0",
     "tslint-microsoft-contrib": "^6.2.0",
     "typescript": "^3.8.3"
