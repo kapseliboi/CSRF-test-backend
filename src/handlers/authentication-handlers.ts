@@ -101,21 +101,19 @@ export async function registrationHandler(req: RegistrationRequest, h: Hapi.Resp
     // This is information we should not disclose directly to a web client.
     const emailUser = await userRepository.findOne({ email });
 
-    let emailSendFunction = (user: User) => {
-        return new Promise((resolve) => {
-            // set timeout between 80-120ms (simulate mailgun API)
-            setTimeout(resolve, Math.random() * (40) + 80);
-        });
-    };
+    let emailSendFunction;
     if (!R.isNil(emailUser)) {
-        shouldCreateNewUser = false;
         if (emailUser.emailConfirmed) {
+            shouldCreateNewUser = false;
             if (emailUser.isActive) {
                 emailSendFunction = sendEmailAlreadyRegisteredEmail;
             }
             else {
                 emailSendFunction = sendAccountDisabled;
             }
+        } else {
+            emailSendFunction = sendRegistrationEmail;
+            newUser = emailUser;
         }
     }
     else {
@@ -149,11 +147,7 @@ export async function registrationHandler(req: RegistrationRequest, h: Hapi.Resp
     }
 
     try {
-        const start = new Date();
         await emailSendFunction(newUser);
-        const end = new Date();
-        const diff = end.getTime() - start.getTime();
-        console.log(`Email send function took ${diff} ms`);
     }
     catch(err) {
         console.log(`An error occurred while sending verification email: ${err}`);
