@@ -39,6 +39,7 @@ export default [
         path: '/logout',
         handler: logoutHandler,
         options: {
+            auth: 'jwt',
             description: 'Logout endpoint',
         }
     },
@@ -51,7 +52,7 @@ export default [
             description: 'Email verification endpoint',
             validate: {
                 params: Joi.object({
-                    id: Joi.number().positive().required().raw(),
+                    id: Joi.number().positive().required(),
                     token: Joi.string().required(),
                 })
             }
