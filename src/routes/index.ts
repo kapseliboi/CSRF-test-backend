@@ -1,6 +1,7 @@
 import * as Hapi from '@hapi/hapi';
 import * as R from 'ramda';
 import authenticationRoutes from './authentication-routes';
+import postRoutes from './post-routes';
 
 const routePrefix = '/api';
 
@@ -24,6 +25,7 @@ function applyDefaultRouteConfig(route: Hapi.ServerRoute): Hapi.ServerRoute {
 
 const routes: Hapi.ServerRoute[] = [
     ...authenticationRoutes,
+    ...postRoutes,
 ];
 
 export default R.map(applyDefaultRouteConfig, routes);
