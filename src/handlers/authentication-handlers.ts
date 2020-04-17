@@ -149,7 +149,11 @@ export async function registrationHandler(req: RegistrationRequest, h: Hapi.Resp
     }
 
     try {
+        const start = new Date();
         await emailSendFunction(newUser);
+        const end = new Date();
+        const diff = end.getTime() - start.getTime();
+        console.log(`Email send function took ${diff} ms`);
     }
     catch(err) {
         console.log(`An error occurred while sending verification email: ${err}`);
