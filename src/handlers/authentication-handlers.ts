@@ -9,6 +9,10 @@ import { hashPassword, verifyEmailValidationToken, verifyPassword, createJWT, cr
 import config from '../config';
 import { ResponseStrings } from '../constants/strings';
 
+/*
+Argon2id hash for password 'testing123'. It will be used in timing attack mitigation
+*/
+const fakeArgon2idHash = '$argon2id$v=19$m=4096,t=3,p=1$oy5aqGhs/v6w/gm5jFE/kA$dduy6z+j8BnxAIWzMG7NZJdTQ+wgH8wHD9YkJgQ55Q7E2a4CHR4qJQ';
 
 /*
 I tried to make all handlers as immune to information leaks through timings as possible.
@@ -16,6 +20,22 @@ I have no idea how much of this is optimized away by V8 optimizing compiler.
 The main point is to prevent leaking information about which emails are registered to
 the service.
 */
+
+async function fakeLoginComputing(usernameOrEmail: string, fakePasswordVerifyRes: boolean) {
+    const fakeJWT = createFakeJWT(usernameOrEmail, fakePasswordVerifyRes);
+    const fakeUser = new User();
+    fakeUser.email = usernameOrEmail;
+    fakeUser.username = usernameOrEmail.substring(0, 50);
+    fakeUser.passwordHash = fakeJWT;
+    fakeUser.lastLogin = new Date();
+    try {
+        await fakeUserRepository.save(fakeUser);
+    }
+    /* tslint:disable-next-line:no-empty */
+    catch {}
+    return Boom.unauthorized(ResponseStrings.credentialsIncorrect);
+}
+
 export async function loginHandler(req: LoginRequest, h: Hapi.ResponseToolkit) {
     const { usernameOrEmail, password } = req.payload;
     let user: User;
@@ -28,57 +48,52 @@ export async function loginHandler(req: LoginRequest, h: Hapi.ResponseToolkit) {
         console.log(`Error occurred while trying to get user from database: ${err}`);
         return Boom.internal(ResponseStrings.internalSomethingWentWrong);
     }
-    let fakePasswordHash: string;
-    if (user) {
+    if (!user) {
+        let fakePasswordVerifyRes: boolean;
         try {
-            if (await verifyPassword(user.passwordHash, password)) {
-                // There shouldn't be a problem that disabled accounts and accounts with unconfirmed
-                // email leak information through timings because an attacker shouldn't be able to
-                // trigger this route on random users.
-                if (!user.emailConfirmed) {
-                    return h.response(ResponseStrings.accountEmailIsNotVerified).code(403);
-                }
-                else if (!user.isActive) {
-                    return h.response(ResponseStrings.accountDisabled).code(403);
-                }
-                else {
-                    const token = createJWT(user);
-                    user.lastLogin = new Date();
-                    try {
-                        await userRepository.save(user);
-                        return h.state('token', token);
-                    }
-                    catch(err) {
-                        console.log(`Error while saving last_login of user: ${err}`);
-                        return Boom.internal(ResponseStrings.internalSomethingWentWrong);
-                    }
-                }
-            }
-        }
-        catch(err) {
-            console.log(`Error while verifying password: ${err}`);
-            return Boom.internal(ResponseStrings.internalSomethingWentWrong);
-        }
-    }
-    else {
-        // This most likely doesn't have the exactly same cost as verifying password
-        // due to missing comparison element. I'm hoping network latency hides the difference.
-        try {
-            fakePasswordHash = await hashPassword(password);
+            fakePasswordVerifyRes = await verifyPassword(fakeArgon2idHash, password);
         }
         catch(err) {
             console.log(`Error while hashing fake password: ${err}`);
             return Boom.internal(ResponseStrings.internalSomethingWentWrong);
         }
+
+        return (await fakeLoginComputing(usernameOrEmail, fakePasswordVerifyRes));
     }
-    const fakeJWT = createFakeJWT(usernameOrEmail);
-    const fakeUser = new User();
-    fakeUser.email = usernameOrEmail;
-    fakeUser.username = usernameOrEmail.substring(0, 50);
-    fakeUser.passwordHash = fakePasswordHash || fakeJWT;
-    fakeUser.lastLogin = new Date();
-    await fakeUserRepository.save(fakeUser);
-    return Boom.unauthorized(ResponseStrings.credentialsIncorrect);
+
+    try {
+        if (await verifyPassword(user.passwordHash, password)) {
+            // There shouldn't be a problem that disabled accounts and accounts with unconfirmed
+            // email leak information through timings because an attacker shouldn't be able to
+            // trigger this route on random users.
+            if (!user.emailConfirmed) {
+                return Boom.forbidden(ResponseStrings.accountEmailIsNotVerified);
+            }
+            else if (!user.isActive) {
+                return Boom.forbidden(ResponseStrings.accountDisabled);
+            }
+            else {
+                const token = createJWT(user);
+                user.lastLogin = new Date();
+                try {
+                    await userRepository.save(user);
+                    h.state('token', token);
+                    return h.response();
+                }
+                catch(err) {
+                    console.log(`Error while saving last_login of user: ${err}`);
+                    return Boom.internal(ResponseStrings.internalSomethingWentWrong);
+                }
+            }
+        }
+        else {
+            return (await fakeLoginComputing(usernameOrEmail, false));
+        }
+    }
+    catch(err) {
+        console.log(`Error while verifying password: ${err}`);
+        return Boom.internal(ResponseStrings.internalSomethingWentWrong);
+    }
 }
 
 export async function registrationHandler(req: RegistrationRequest, h: Hapi.ResponseToolkit) {
@@ -158,12 +173,13 @@ export async function registrationHandler(req: RegistrationRequest, h: Hapi.Resp
 }
 
 export function logoutHandler(req: Hapi.Request, h: Hapi.ResponseToolkit) {
-    return h.unstate('token');
+    h.unstate('token');
+    return h.response();
 }
 
 export async function emailVerificationHandler(req: EmailVerificationRequest, h: Hapi.ResponseToolkit) {
     const { id, token } = req.params;
-    const userPromise = userRepository.findOne({ id: parseInt(id, 10) });
+    const userPromise = userRepository.findOne(id);
 
     const verificationFailedHTML =
         `<!DOCTYPE html>
