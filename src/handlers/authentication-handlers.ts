@@ -184,7 +184,7 @@ export async function emailVerificationHandler(req: EmailVerificationRequest, h:
     const verificationFailedHTML =
         `<!DOCTYPE html>
         <html>
-            <title>CSRFTest - Email succesfully confirmed</title>
+            <title>CSRFTest - Email not confirmed</title>
             <body>
                 <p>Email verification was not succesful<p>
             </body>
