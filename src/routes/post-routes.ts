@@ -5,7 +5,7 @@ import * as Joi from '@hapi/joi';
 export default [
     {
         method: 'GET',
-        path: '/post',
+        path: '',
         handler: getAllPostsHandler,
         options: {
             auth: 'jwt',
@@ -14,7 +14,7 @@ export default [
     },
     {
         method: 'GET',
-        path: '/post/{id}',
+        path: '/{id}',
         handler: getPostHandler,
         options: {
             auth: 'jwt',
@@ -28,7 +28,7 @@ export default [
     },
     {
         method: 'POST',
-        path: '/post',
+        path: '',
         handler: createPostHandler,
         options: {
             auth: 'jwt',
@@ -43,7 +43,7 @@ export default [
     },
     {
         method: 'PUT',
-        path: '/post/{id}',
+        path: '/{id}',
         handler: editPostHandler,
         options: {
             auth: 'jwt',
@@ -61,7 +61,7 @@ export default [
     },
     {
         method: 'DELETE',
-        path: '/post/{id}',
+        path: '/{id}',
         handler: deletePostHandler,
         options: {
             auth: 'jwt',

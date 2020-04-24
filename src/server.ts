@@ -4,10 +4,11 @@ import * as Inert from '@hapi/inert';
 import * as Vision from '@hapi/vision';
 import * as hapiRequireHttps from 'hapi-require-https';
 import * as hapiJWT from 'hapi-auth-jwt2';
+import * as crumb from '@hapi/crumb';
 
 import config from './config';
 import { validate } from './util/authentication';
-import routes from './routes';
+import routes, { routePrefix } from './routes';
 
 export async function initServer() {
     const server = await new Hapi.Server({
@@ -88,6 +89,7 @@ export async function initServer() {
         encoding: 'none',
         strictHeader: true,
         clearInvalid: true,
+        path: '/',
     });
 
 
