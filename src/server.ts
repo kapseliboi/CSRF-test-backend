@@ -19,7 +19,25 @@ export async function initServer() {
         info: {
             title: 'CSRF test API Documentation',
             version: process.env.npm_package_version,
-        }
+        },
+        basePath: routePrefix,
+        pathPrefixSize: 2,
+    };
+
+    const csrfOptions: crumb.RegisterOptions = {
+        key: config.HTTPS_ONLY ? '__Host-csrf' : '_csrf',
+        size: 43, // this is the default value which results in 256bits
+        autoGenerate: true,
+        addToViewContext: true,
+        cookieOptions: {
+            isHttpOnly: false,
+            isSameSite: 'Strict',
+            isSecure: config.HTTPS_ONLY,
+            path: '/',
+        },
+        headerName: config.CSRF_HEADER_NAME,
+        restful: true,
+        logUnauthorized: false,
     };
 
     const plugins = [
@@ -35,7 +53,11 @@ export async function initServer() {
         },
         {
             plugin: hapiJWT,
-        }
+        },
+        {
+            plugin: crumb,
+            options: csrfOptions,
+        },
     ];
 
     if (config.HTTPS_ONLY) {
