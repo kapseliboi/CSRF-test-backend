@@ -66,10 +66,10 @@ const defaultRoute: Hapi.ServerRoute = {
     },
 };
 
-const routes: Hapi.ServerRoute[] = [
+const rawRoutes: Hapi.ServerRoute[] = [
     ...(applyPrefixToRoutes(authenticationRoutes, '/auth')),
     ...(applyPrefixToRoutes(postRoutes, '/post')),
     defaultRoute,
 ];
 
-export default R.map(applyDefaultRouteConfig, routes);
+export default R.map(applyDefaultRouteConfig, rawRoutes);
