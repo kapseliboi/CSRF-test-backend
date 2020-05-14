@@ -10,5 +10,6 @@ services:
       - "csrf_backend:/var/lib/postgresql/data"
     environment:
       - TZ=Europe/Helsinki
+      - POSTGRES_PASSWORD=postgres
 volumes:
   csrf_backend:
