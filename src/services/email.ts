@@ -26,7 +26,7 @@ else {
     };
 }
 
-const NOREPLY_EMAIL = 'noreply@csrftest.com';
+const NOREPLY_EMAIL = `noreply@${config.MAILGUN_DOMAIN}`;
 
 async function sendEmail(from: string, to: string, subject: string, html?: string, text?: string) {
     const { message } = await mailService.messages().send({

@@ -32,7 +32,7 @@ export default {
     DATABASE_URL: mandatoryEnv('DATABASE_URL'),
     // Mailgun config, required for sending email
     MAILGUN_API_KEY: optionalEnv('MAILGUN_API_KEY'),
-    MAILGUN_DOMAIN: optionalEnv('MAILGUN_DOMAIN'),
+    MAILGUN_DOMAIN: mandatoryEnv('MAILGUN_DOMAIN'),
     MAILGUN_PUBLIC_KEY: optionalEnv('MAILGUN_PUBLIC_KEY'),
     MAILGUN_SMTP_LOGIN: optionalEnv('MAILGUN_SMTP_LOGIN'),
     MAILGUN_SMTP_PASSWORD: optionalEnv('MAILGUN_SMTP_PASSWORD'),
