@@ -42,7 +42,7 @@ async function sendEmail(from: string, to: string, subject: string, html?: strin
 export async function sendRegistrationEmail(user: User) {
     const subject = 'Complete your registration at CSRFTest';
     const text = `Hello ${user.username}!\nComplete your registration by clicking the link below:\n`
-        + `${config.FRONTEND_URL}/api/verify-email/${user.id}/${encodeURIComponent(await createEmailValidationToken(user))}`;
+        + `${config.FRONTEND_URL}/api/auth/verify-email/${user.id}/${encodeURIComponent(await createEmailValidationToken(user))}`;
     await sendEmail(NOREPLY_EMAIL, user.email, subject, undefined, text);
 }
 
