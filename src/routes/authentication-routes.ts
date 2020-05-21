@@ -58,4 +58,4 @@ export default [
             }
         }
     }
-] as Hapi.ServerRoute[]
+] as Hapi.ServerRoute[];

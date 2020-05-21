@@ -23,6 +23,13 @@ export interface LoginRequest extends Request {
     }
 }
 
+export function isAuthenticatedRequest(obj: any): obj is AuthenticatedRequest {
+    if (obj && obj.auth && obj.auth.credentials && obj.auth.credentials.username) {
+        return true;
+    }
+    return false;
+}
+
 export interface AuthenticatedRequest extends Omit<Request, 'auth'> {
     auth: JWTRequestAuth;
 };

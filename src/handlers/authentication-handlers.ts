@@ -78,7 +78,10 @@ export async function loginHandler(req: LoginRequest, h: Hapi.ResponseToolkit) {
                 try {
                     await userRepository.save(user);
                     h.state('token', token);
-                    return h.response();
+                    return {
+                        username: user.username,
+                        email: user.email,
+                    };
                 }
                 catch(err) {
                     console.log(`Error while saving last_login of user: ${err}`);
@@ -156,8 +159,7 @@ export async function registrationHandler(req: RegistrationRequest, h: Hapi.Resp
             await fakeUserRepository.save(newUser);
         }
         catch(err) {
-            console.log('Saving fake user to database failed');
-            return Boom.internal(ResponseStrings.internalSomethingWentWrong);
+            console.log('Saving fake user to database failed, most likely because another user with same name exists.');
         }
     }
 

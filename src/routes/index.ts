@@ -4,6 +4,7 @@ import * as Joi from '@hapi/joi';
 import authenticationRoutes from './authentication-routes';
 import postRoutes from './post-routes';
 import config from '../config';
+import userRoutes from './user-routes';
 
 
 export const routePrefix = '/api';
@@ -59,7 +60,7 @@ function applyPrefixToRoutes(routes: Hapi.ServerRoute[], prefix: string): Hapi.S
 const defaultRoute: Hapi.ServerRoute = {
     method: 'GET',
     path: '/test',
-    handler: (request: Hapi.Request, h: Hapi.ResponseToolkit) => h.response,
+    handler: (request: Hapi.Request, h: Hapi.ResponseToolkit) => h.response(),
     options: {
         auth: false,
         description: 'Empty route',
@@ -69,6 +70,7 @@ const defaultRoute: Hapi.ServerRoute = {
 const rawRoutes: Hapi.ServerRoute[] = [
     ...(applyPrefixToRoutes(authenticationRoutes, '/auth')),
     ...(applyPrefixToRoutes(postRoutes, '/post')),
+    ...(applyPrefixToRoutes(userRoutes, '/user')),
     defaultRoute,
 ];
 
