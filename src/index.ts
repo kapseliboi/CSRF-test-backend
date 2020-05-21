@@ -13,8 +13,11 @@ process.on('unhandledRejection', (reason) => {
 
 async function start() {
     try {
-        await createConnection();
+        console.log('Running start function')
+        await createConnection(config.TYPEORM_OPTS);
+        console.log('Connected to database');
         (await import('./server')).initServer();
+        console.log('Initialized server');
     }
     catch (e) {
         console.log(e);

@@ -1,4 +1,5 @@
 import * as R from 'ramda';
+import { ConnectionOptions } from 'typeorm/connection/ConnectionOptions';
 
 function mandatoryEnv(name: string) {
     const value = process.env[name];
@@ -22,6 +23,10 @@ function decodeBase64(value: string) {
     return Buffer.from(value, 'base64');
 }
 
+function stringToInt(value: string): number {
+    return parseInt(value, 10);
+}
+
 export default {
     NODE_ENV: optionalEnv('NODE_ENV'),
     JWT_SECRET_KEY: decodeBase64(mandatoryEnv('JWT_SECRET_KEY')),
@@ -39,4 +44,20 @@ export default {
     MAILGUN_SMTP_PORT: optionalEnv('MAILGUN_SMTP_PORT'),
     MAILGUN_SMTP_SERVER: optionalEnv('MAILGUN_SMTP_SERVER'),
     CSRF_HEADER_NAME: 'X-CSRF-TOKEN',
+    TYPEORM_OPTS: {
+        type: 'postgres',
+        name: 'default',
+        host: mandatoryEnv('DATABASE_HOST'),
+        username: mandatoryEnv('DATABASE_USERNAME'),
+        password: mandatoryEnv('DATABASE_PASSWORD'),
+        database: mandatoryEnv('DATABASE_NAME'),
+        port: stringToInt(mandatoryEnv('DATABASE_PORT')),
+        synchronize: stringToBool(mandatoryEnv('DATABASE_SYNCHRONIZE')),
+        logging: mandatoryEnv('DATABASE_LOGGING'),
+        logger: 'simple-console',
+        entities: ['dist/src/entity/**/*.js'],
+        migrations: ['dist/db/migration/**/*.js'],
+        subscribers: ['dist/db/subscribers/**/*.js'],
+        ssl: stringToBool(mandatoryEnv('DATABASE_SSL')),
+    } as ConnectionOptions,
 };
