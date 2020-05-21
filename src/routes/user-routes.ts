@@ -7,7 +7,10 @@ export default [
         path: '',
         handler: currentUserHandler,
         options: {
-            auth: false,
+            auth: {
+                mode: 'try',
+                strategy: 'jwt',
+            },
             description: 'Get current user. Return empty object if no user',
         },
     },
