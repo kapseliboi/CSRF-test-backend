@@ -4,7 +4,7 @@ import { currentUserHandler } from '../handlers/user-handlers';
 export default [
     {
         method: 'GET',
-        path: '/',
+        path: '',
         handler: currentUserHandler,
         options: {
             auth: false,
