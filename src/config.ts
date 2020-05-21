@@ -27,12 +27,17 @@ function stringToInt(value: string): number {
     return parseInt(value, 10);
 }
 
+const HTTPS_ONLY = stringToBool(optionalEnv('HTTPS_ONLY'));
+
 export default {
     NODE_ENV: optionalEnv('NODE_ENV'),
     JWT_SECRET_KEY: decodeBase64(mandatoryEnv('JWT_SECRET_KEY')),
     EMAIL_TOKEN_SECRET_KEY: mandatoryEnv('EMAIL_TOKEN_SECRET_KEY'),
     FRONTEND_URL: mandatoryEnv('FRONTEND_URL'),
-    HTTPS_ONLY: stringToBool(optionalEnv('HTTPS_ONLY')),
+    BACKEND_URL: mandatoryEnv('BACKEND_URL'),
+    HTTPS_ONLY,
+    CSRF_COOKIE_NAME: HTTPS_ONLY ? '__Host-csrf' : '_csrf',
+    CSRF_HEADER_NAME: mandatoryEnv('CSRF_HEADER_NAME'),
     PORT: optionalEnv('PORT') || 8080,
     DATABASE_URL: mandatoryEnv('DATABASE_URL'),
     // Mailgun config, required for sending email
@@ -43,7 +48,6 @@ export default {
     MAILGUN_SMTP_PASSWORD: optionalEnv('MAILGUN_SMTP_PASSWORD'),
     MAILGUN_SMTP_PORT: optionalEnv('MAILGUN_SMTP_PORT'),
     MAILGUN_SMTP_SERVER: optionalEnv('MAILGUN_SMTP_SERVER'),
-    CSRF_HEADER_NAME: 'X-CSRF-TOKEN',
     TYPEORM_OPTS: {
         type: 'postgres',
         name: 'default',

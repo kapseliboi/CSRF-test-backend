@@ -12,8 +12,19 @@ import routes, { routePrefix } from './routes';
 
 export async function initServer() {
     const server = await new Hapi.Server({
-        host: config.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost',
+        host: config.NODE_ENV === "production" ? "0.0.0.0" : "localhost",
         port: config.PORT,
+        ...(config.FRONTEND_URL !== config.BACKEND_URL
+            ? {
+                  routes: {
+                      cors: {
+                          origin: [config.FRONTEND_URL],
+                          additionalHeaders: [config.CSRF_HEADER_NAME],
+                          credentials: true,
+                      },
+                  },
+              }
+            : {}),
     });
 
     const swaggerOptions: HapiSwagger.RegisterOptions = {
