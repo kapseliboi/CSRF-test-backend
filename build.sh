@@ -6,4 +6,4 @@ git submodule update --recursive --remote
 cd frontend
 npm install
 npm run build
-cp -rf build/* ../dist/frontend/
+cp -r build ../dist/frontend
