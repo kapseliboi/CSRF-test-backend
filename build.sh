@@ -3,6 +3,8 @@
 npm run build-prod
 git submodule update --init --recursive
 git submodule update --recursive --remote
+ls
+pwd
 cd CSRF-frontend-test
 npm install
 npm run build
