@@ -103,10 +103,11 @@ export async function initServer() {
         path: '/',
     });
 
+    // Serve react app
     if (config.FRONTEND_URL === config.BACKEND_URL) {
         routes.push({
             method: 'GET',
-            path: "*",
+            path: "/{path*}",
             handler: {
                 directory: {
                     path: 'dist/frontend',
