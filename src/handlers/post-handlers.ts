@@ -14,7 +14,6 @@ function mapPostToReturnablePost(post: Post) {
     return {
         id: post.id,
         username: post.user.username,
-        userId: post.user.id,
         title: post.title,
         text: post.text,
         createdAt: post.createdAt,
@@ -64,7 +63,6 @@ export async function createPostHandler(req: CreatePostRequest, h: Hapi.Response
         return ({
             id: post.id,
             username,
-            userId: id,
             title: post.title,
             text: post.text,
             createdAt: post.createdAt,
