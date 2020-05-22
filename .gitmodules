@@ -1,0 +1,3 @@
+[submodule "CSRF-frontend-test"]
+	path = CSRF-frontend-test
+	url = https://github.com/kapseliboi/CSRF-frontend-test
