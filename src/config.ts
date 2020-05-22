@@ -62,6 +62,6 @@ export default {
         entities: ['dist/src/entity/**/*.js'],
         migrations: ['dist/db/migration/**/*.js'],
         subscribers: ['dist/db/subscribers/**/*.js'],
-        ssl: stringToBool(mandatoryEnv('DATABASE_SSL')),
+        ssl: stringToBool(mandatoryEnv('DATABASE_SSL')) ? { rejectUnauthorized: false } : false,
     } as ConnectionOptions,
 };
