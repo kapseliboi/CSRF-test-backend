@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node dist/src/index.js",
     "dev": "concurrently -k -p '[{name}]' -n TS,Node -c green.bold,magenta.bold 'npm run watch-build' 'npm run watch-server'",
-    "build": "tsc",
+    "build": "./build.sh",
+    "build-prod": "tsc",
     "watch-build": "tsc -w",
     "watch-server": "nodemon -L --watch dist/src --watch src --delay 2 -r source-map-support/register dist/src/index.js",
     "test": "npx tslint --project ."
