@@ -117,6 +117,18 @@ export async function initServer() {
             },
             options: {
                 auth: false,
+                // Catch all route
+                ext: {
+                    onPreResponse: {
+                        method: (req, h, err) => {
+                            const response = req.response as any;
+                            if (response && response.output && response.output.statusCode === 404) {
+                                return h.file('dist/frontend/index.html');
+                            }
+                            return h.continue;
+                        }
+                    }
+                }
             },
         });
     }
