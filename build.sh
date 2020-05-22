@@ -5,7 +5,7 @@ git submodule update --init --recursive
 git submodule update --recursive --remote
 ls
 pwd
-cd CSRF-frontend-test
+cd frontend
 npm install
 npm run build
-cp -r build ../dist/frontend
+cp -r build/* ../dist/frontend/
