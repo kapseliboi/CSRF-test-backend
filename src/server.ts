@@ -103,8 +103,21 @@ export async function initServer() {
         path: '/',
     });
 
+    if (config.FRONTEND_URL === config.BACKEND_URL) {
+        routes.push({
+            method: 'GET',
+            path: "*",
+            handler: {
+                directory: {
+                    path: 'dist/frontend',
+                    listing: false,
+                    index: true,
+                },
+            },
+        });
+    }
 
-    server.route(routes)
+    server.route(routes);
     console.log('Routes registered');
 
     await server.start();
