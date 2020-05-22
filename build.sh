@@ -1,8 +1,8 @@
 #!/bin/sh
 
 npm run build-prod
-git submodule update --init --recursive
-git submodule update --recursive --remote
+/usr/bin/git submodule update --init --recursive
+/usr/bin/git submodule update --recursive --remote
 cd frontend
 npm install
 npm run build
