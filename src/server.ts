@@ -18,7 +18,7 @@ export async function initServer() {
             ? {
                   routes: {
                       cors: {
-                          origin: [config.FRONTEND_URL],
+                          origin: [config.FRONTEND_URL, config.BACKEND_URL],
                           additionalHeaders: [config.CSRF_HEADER_NAME],
                           credentials: true,
                       },
