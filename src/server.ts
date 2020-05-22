@@ -115,6 +115,9 @@ export async function initServer() {
                     index: true,
                 },
             },
+            options: {
+                auth: false,
+            },
         });
     }
 
