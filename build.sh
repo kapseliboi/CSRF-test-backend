@@ -1,8 +1,7 @@
 #!/bin/sh
 
 npm run build-prod
-/usr/bin/git submodule update --init --recursive
-/usr/bin/git submodule update --recursive --remote
+git clone https://github.com/kapseliboi/CSRF-frontend-test.git frontend
 cd frontend
 npm install
 npm run build
